@@ -11,6 +11,14 @@ string censorName(string name) {
     return censoredName;
 }
 
+string shiftName1(string name) {
+
+}
+
+string shiftName2(string name) {
+    
+}
+
 int main() {
     string name;
     cout << "What is your name?\n  ";
@@ -18,6 +26,8 @@ int main() {
 
     cout << name << endl; // Print the name
     cout << censorName(name) << endl; // Print the censored name
+    cout << shiftName1(name) << endl; // Print the censored name
+    cout << shiftName2(name) << endl; // Print the censored name
 
     return 0;
 }
