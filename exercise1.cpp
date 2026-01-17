@@ -12,11 +12,19 @@ string censorName(string name) {
 }
 
 string shiftName1(string name) {
-
+    string shiftedName = "";
+    for (int i=0; i<name.length(); i++) {
+        char letter = name[i];
+        if ((letter >= 'a' && letter <= 'y')||(letter >= 'A' && letter <= 'Y')) shiftedName += letter + 1;
+        else if (letter == 'z') shiftedName += 'a';
+        else if (letter == 'Z') shiftedName += 'A';
+        else shiftedName += letter;
+    }
+    return shiftedName;
 }
 
 string shiftName2(string name) {
-    
+    return " ";
 }
 
 int main() {
