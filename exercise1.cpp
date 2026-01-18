@@ -11,14 +11,18 @@ string censorName(string name) {
     return censoredName;
 }
 
+// This function takes a name, then replaces each character with the succeeding character in the alphabet.
+// This is done by taking an empty string, then shifting each letter to the right based on its ASCII value.
+// The case of 'z' and 'Z' needs to be handled separately, as the next character in ASCII does not loop back
+// to 'a' and 'A'. For the case of non-letter characters, it is simply concatenated to the shifted name.
 string shiftName1(string name) {
     string shiftedName = "";
-    for (int i=0; i<name.length(); i++) {
-        char letter = name[i];
-        if ((letter >= 'a' && letter <= 'y')||(letter >= 'A' && letter <= 'Y')) shiftedName += letter + 1;
-        else if (letter == 'z') shiftedName += 'a';
-        else if (letter == 'Z') shiftedName += 'A';
-        else shiftedName += letter;
+    for (int i=0; i<name.length(); i++) { // Loop through every character of the input name
+        char letter = name[i]; // Set the letter to the current character according to the index
+        if ((letter >= 'a' && letter <= 'y')||(letter >= 'A' && letter <= 'Y')) shiftedName += letter + 1; // Shift letter to next position of alphabet
+        else if (letter == 'z') shiftedName += 'a'; // Replace z with a
+        else if (letter == 'Z') shiftedName += 'A'; // Replace Z with A
+        else shiftedName += letter; // Accounting for non-letter characters
     }
     return shiftedName;
 }
