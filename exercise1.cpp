@@ -27,19 +27,27 @@ string shiftName1(string name) {
     return shiftedName;
 }
 
-string shiftName2(string name) {
-    return " ";
+string shiftName2(char namePointer[]) {
+    string nameString = namePointer;
+    string shiftedName = shiftName1(nameString);
+    return shiftedName;
 }
 
 int main() {
     string name;
     cout << "What is your name?\n  ";
     cin >> name; // Asks the user's name then passes it to 'name'
+    
+    char nameChar[name.length()];
+    for (int i=0; i<name.length(); i++) {
+        nameChar[i] = name[i];
+    }
+    char *nameCharPointer = nameChar;
 
     cout << name << endl; // Print the name
     cout << censorName(name) << endl; // Print the censored name
     cout << shiftName1(name) << endl; // Print the censored name
-    cout << shiftName2(name) << endl; // Print the censored name
+    cout << shiftName2(nameCharPointer) << endl; // Print the censored name
 
     return 0;
 }
