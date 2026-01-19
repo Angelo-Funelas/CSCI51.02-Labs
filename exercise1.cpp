@@ -27,27 +27,29 @@ string shiftName1(string name) {
     return shiftedName;
 }
 
-string shiftName2(char namePointer[]) {
-    string nameString = namePointer;
-    string shiftedName = shiftName1(nameString);
-    return shiftedName;
+// ShiftName2 takes a char pointer as its parameter, with the char value within the pointer being shifted using
+// the logic for shiftName1.
+char shiftName2(char *namePointer) {
+     if ((*namePointer >= 'a' && *namePointer <= 'y')||(*namePointer >= 'A' && *namePointer <= 'Y')) *namePointer = *namePointer + 1; // Shift letter to next position of alphabet
+        else if (*namePointer == 'z') *namePointer = 'a'; // Replace z with a
+        else if (*namePointer == 'Z') *namePointer = 'A'; // Replace Z with A
+       
+    return *namePointer;
 }
 
 int main() {
     string name;
     cout << "What is your name?\n  ";
     cin >> name; // Asks the user's name then passes it to 'name'
-    
-    char nameChar[name.length()];
-    for (int i=0; i<name.length(); i++) {
-        nameChar[i] = name[i];
-    }
-    char *nameCharPointer = nameChar;
 
     cout << name << endl; // Print the name
     cout << censorName(name) << endl; // Print the censored name
     cout << shiftName1(name) << endl; // Print the censored name
-    cout << shiftName2(nameCharPointer) << endl; // Print the censored name
+   
+    for (int i=0; i<name.length(); i++) {
+       shiftName2(&name[i]); // Updates the value of each char in name
+    }
+    cout << name << endl;
 
     return 0;
 }
