@@ -1,0 +1,12 @@
+Agent #1 is at (34, 46)
+Agent #1 yells: "Hello there"
+Agent #2 is at (46, 90)
+Agent #2 holds up the number: 39
+Agent #3 is at (30, 68)
+Agent #3 yells: "Target location confirmed"
+Agent #4 is at (59, 68)
+Agent #4 yells: "6 7"
+Agent #5 is at (63, 89)
+Agent #5 yells: "Operation Success"
+Agent #6 is at (35, 92)
+Agent #6 holds up the number: 777

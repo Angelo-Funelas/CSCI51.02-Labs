@@ -1,0 +1,7 @@
+6
+34 46 Hello there
+46 90 39
+30 68 Target location confirmed
+59 68 6 7
+63 89 Operation Success
+35 92 777
