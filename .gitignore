@@ -1,5 +1,9 @@
 # C++ gitignore from https://github.com/github/gitignore
 
+*
+!*/
+!*.*
+
 # Prerequisites
 *.d
 
