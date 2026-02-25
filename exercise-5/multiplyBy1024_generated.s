@@ -1,8 +1,8 @@
-	.file	"multiplyBy256.cpp"
+	.file	"multiplyBy1024.cpp"
 	.text
-	.globl	_Z13multiplyBy256P8IntArray
-	.type	_Z13multiplyBy256P8IntArray, @function
-_Z13multiplyBy256P8IntArray:
+	.globl	_Z14multiplyBy1024P8IntArray
+	.type	_Z14multiplyBy1024P8IntArray, @function
+_Z14multiplyBy1024P8IntArray:
 .LFB1812:
 	.cfi_startproc
 	endbr64
@@ -16,8 +16,8 @@ _Z13multiplyBy256P8IntArray:
 	movq	%rax, %rdx
 	addq	8(%rdi), %rdx
     movl	(%rdx), %ecx
-    # Implemented with binary algorithm
-	sall	$8, %ecx
+    # Implemented with binary summation algorithm
+	sall	$10, %ecx
 	movl	%ecx, (%rdx)
 	addq	$4, %rax
 	cmpq	%rsi, %rax
@@ -26,9 +26,9 @@ _Z13multiplyBy256P8IntArray:
 	ret
 	.cfi_endproc
 .LFE1812:
-	.size	_Z13multiplyBy256P8IntArray, .-_Z13multiplyBy256P8IntArray
-	.type	_GLOBAL__sub_I__Z13multiplyBy256P8IntArray, @function
-_GLOBAL__sub_I__Z13multiplyBy256P8IntArray:
+	.size	_Z14multiplyBy1024P8IntArray, .-_Z14multiplyBy1024P8IntArray
+	.type	_GLOBAL__sub_I__Z14multiplyBy1024P8IntArray, @function
+_GLOBAL__sub_I__Z14multiplyBy1024P8IntArray:
 .LFB2294:
 	.cfi_startproc
 	endbr64
@@ -47,10 +47,10 @@ _GLOBAL__sub_I__Z13multiplyBy256P8IntArray:
 	ret
 	.cfi_endproc
 .LFE2294:
-	.size	_GLOBAL__sub_I__Z13multiplyBy256P8IntArray, .-_GLOBAL__sub_I__Z13multiplyBy256P8IntArray
+	.size	_GLOBAL__sub_I__Z14multiplyBy1024P8IntArray, .-_GLOBAL__sub_I__Z14multiplyBy1024P8IntArray
 	.section	.init_array,"aw"
 	.align 8
-	.quad	_GLOBAL__sub_I__Z13multiplyBy256P8IntArray
+	.quad	_GLOBAL__sub_I__Z14multiplyBy1024P8IntArray
 	.local	_ZStL8__ioinit
 	.comm	_ZStL8__ioinit,1,1
 	.hidden	__dso_handle

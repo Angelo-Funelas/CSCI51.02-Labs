@@ -1,0 +1,3 @@
+g++ multiplyByXGenerator.cpp -o multiplyByXGenerator.out ; ./multiplyByXGenerator.out 256 > multiplyBy256_generated.s;
+python multiplyByXTester_generator.py > multiplyByXTester.cpp;
+g++ multiplyByXTester.cpp multiplyBy256_generated.s -o multiplyByXTester.out ; ./multiplyByXTester.out;

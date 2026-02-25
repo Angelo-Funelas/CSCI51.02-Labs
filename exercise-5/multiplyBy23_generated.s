@@ -16,13 +16,13 @@ _Z12multiplyBy23P8IntArray:
 	movq	%rax, %rdx
 	addq	8(%rdi), %rdx
     movl	(%rdx), %ecx
-    movl	%ecx, %r8d
-	leal	(,%ecx, 2), %ecx
-    movl	%ecx, %r9d
-	leal	(%ecx,%ecx, 4), %ecx
-	leal	(,%ecx, 2), %ecx
-	leal	(%r9d,%ecx,1), %ecx
-	leal	(%r8d,%ecx,1), %ecx
+    # Implemented with binary difference algorithm
+	movl	%ecx, %r8d
+	sall	$5, %ecx
+	leal	(, %r8d, 1), %r8d
+	subl	%r8d, %ecx
+	leal	(, %r8d, 8), %r8d
+	subl	%r8d, %ecx
 	movl	%ecx, (%rdx)
 	addq	$4, %rax
 	cmpq	%rsi, %rax
