@@ -1,8 +1,8 @@
-	.file	"multiplyBy256.cpp"
+	.file	"multiplyBy88888888.cpp"
 	.text
-	.globl	_Z13multiplyBy256P8IntArray
-	.type	_Z13multiplyBy256P8IntArray, @function
-_Z13multiplyBy256P8IntArray:
+	.globl	_Z18multiplyBy88888888P8IntArray
+	.type	_Z18multiplyBy88888888P8IntArray, @function
+_Z18multiplyBy88888888P8IntArray:
 .LFB1812:
 	.cfi_startproc
 	endbr64
@@ -16,8 +16,33 @@ _Z13multiplyBy256P8IntArray:
 	movq	%rax, %rdx
 	addq	8(%rdi), %rdx
     movl	(%rdx), %ecx
-    # Implemented with binary summation algorithm
-	sall	$8, %ecx
+    # Implemented with factoring algorithm
+	leal	(,%ecx, 8), %ecx
+    movl	%ecx, %r8d
+	leal	(%ecx,%ecx, 4), %ecx
+	leal	(,%ecx, 2), %ecx
+    movl	%ecx, %r9d
+	leal	(%ecx,%ecx,2), %ecx
+	leal	(,%ecx,2), %ecx
+	leal	(%ecx,%ecx, 4), %ecx
+    movl	%ecx, %r10d
+	leal	(,%ecx, 4), %ecx
+    movl	%ecx, %r11d
+	leal	(%ecx,%ecx,2), %ecx
+	leal	(,%ecx,2), %ecx
+    movl	%ecx, %r12d
+	leal	(%ecx,%ecx,2), %ecx
+	leal	(,%ecx,2), %ecx
+    movl	%ecx, %r13d
+	leal	(,%ecx, 8), %ecx
+	leal	(,%ecx, 8), %ecx
+	leal	(,%ecx, 4), %ecx
+	leal	(%r13d,%ecx,1), %ecx
+	leal	(%r12d,%ecx,1), %ecx
+	leal	(%r11d,%ecx,1), %ecx
+	leal	(%r10d,%ecx,1), %ecx
+	leal	(%r9d,%ecx,1), %ecx
+	leal	(%r8d,%ecx,1), %ecx
 	movl	%ecx, (%rdx)
 	addq	$4, %rax
 	cmpq	%rsi, %rax
@@ -26,9 +51,9 @@ _Z13multiplyBy256P8IntArray:
 	ret
 	.cfi_endproc
 .LFE1812:
-	.size	_Z13multiplyBy256P8IntArray, .-_Z13multiplyBy256P8IntArray
-	.type	_GLOBAL__sub_I__Z13multiplyBy256P8IntArray, @function
-_GLOBAL__sub_I__Z13multiplyBy256P8IntArray:
+	.size	_Z18multiplyBy88888888P8IntArray, .-_Z18multiplyBy88888888P8IntArray
+	.type	_GLOBAL__sub_I__Z18multiplyBy88888888P8IntArray, @function
+_GLOBAL__sub_I__Z18multiplyBy88888888P8IntArray:
 .LFB2294:
 	.cfi_startproc
 	endbr64
@@ -47,10 +72,10 @@ _GLOBAL__sub_I__Z13multiplyBy256P8IntArray:
 	ret
 	.cfi_endproc
 .LFE2294:
-	.size	_GLOBAL__sub_I__Z13multiplyBy256P8IntArray, .-_GLOBAL__sub_I__Z13multiplyBy256P8IntArray
+	.size	_GLOBAL__sub_I__Z18multiplyBy88888888P8IntArray, .-_GLOBAL__sub_I__Z18multiplyBy88888888P8IntArray
 	.section	.init_array,"aw"
 	.align 8
-	.quad	_GLOBAL__sub_I__Z13multiplyBy256P8IntArray
+	.quad	_GLOBAL__sub_I__Z18multiplyBy88888888P8IntArray
 	.local	_ZStL8__ioinit
 	.comm	_ZStL8__ioinit,1,1
 	.hidden	__dso_handle
