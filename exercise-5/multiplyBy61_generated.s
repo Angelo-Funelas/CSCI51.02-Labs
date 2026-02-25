@@ -16,18 +16,12 @@ _Z12multiplyBy61P8IntArray:
 	movq	%rax, %rdx
 	addq	8(%rdi), %rdx
     movl	(%rdx), %ecx
-	# Falling back to binary solution
-	leal	(, %ecx, 1), %ecx
-	movl	%ecx, %r8d
-	leal	(, %ecx, 4), %ecx
-	addl	%ecx, %r8d
-	leal	(, %ecx, 2), %ecx
-	addl	%ecx, %r8d
-	leal	(, %ecx, 2), %ecx
-	addl	%ecx, %r8d
-	leal	(, %ecx, 2), %ecx
-	addl	%ecx, %r8d
-    movl	%r8d, %ecx
+    movl	%ecx, %r8d
+	leal	(%ecx,%ecx,2), %ecx
+	leal	(,%ecx,2), %ecx
+	leal	(%ecx,%ecx, 4), %ecx
+	leal	(,%ecx, 2), %ecx
+	leal	(%r8d,%ecx,1), %ecx
 	movl	%ecx, (%rdx)
 	addq	$4, %rax
 	cmpq	%rsi, %rax

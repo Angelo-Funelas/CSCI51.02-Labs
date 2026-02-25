@@ -17,12 +17,12 @@ bool isPrime(int n) {
 void binary_getInstructions(vector<string>* instructions, int num) {
     int bitSize = sizeof(num) * CHAR_BIT;
     int last_shift_i = 0;
-    bool first_shift = true;
+    int shift_count = 0;
     for (int i = 0; i < bitSize; i++) {
         int bit = (num >> i) & 1;
         if (bit == 1) {
-            string instruction = (first_shift)? "movl":"addl";
-            first_shift = false;
+            string instruction = (shift_count == 0)? "movl":"addl";
+            shift_count++;
             int shift_count = i-last_shift_i;
             if (shift_count < 4) {
                 instructions->push_back("	leal	(, %ecx, " + to_string((int)(pow(2,shift_count))) + "), %ecx\n");
@@ -33,30 +33,37 @@ void binary_getInstructions(vector<string>* instructions, int num) {
             last_shift_i = i;
         }
     }
-    instructions->push_back("    movl	%r8d, %ecx\n");
+    if (shift_count>1) {
+        instructions->push_back("    movl	%r8d, %ecx\n");
+    } else {
+        instructions->pop_back();
+    }
 }
 
-int possible_factors[] = {9,8,7,6,5,4,3,2};
+int possible_factors[] = {9,8,6,5,4,3,2};
 int max_depth = 3;
 void factoring_getInstructions(vector<string>* instructions, int og_num, int num, int depth, int run_count) {
-    if (true || depth>max_depth || run_count > 20) {
+    if (depth>max_depth || run_count > 20) {
         instructions->clear();
         cout << "	# Falling back to binary solution" << endl;
         binary_getInstructions(instructions, og_num);
         return;
     };
     if (num <= 1) return;
-    bool is_prime = isPrime(num) && (num > 9 || num == 7);
-    if (is_prime) {
+    // instructions->push_back("    # iteration: " + to_string(num) + " " + to_string(isPrime(num)) + "\n");
+    if (isPrime(num) && (num > 9 || num == 7)) {
+        // instructions->push_back("    # prime found: " + to_string(num) + "\n");
         num--;
         string temp_register = "%r" + to_string(8+depth) + "d";
         instructions->push_back("    movl	%ecx, " + temp_register + "\n");
         factoring_getInstructions(instructions, og_num, num, depth+1, run_count+1);
+        // instructions->push_back("    # +x: " + to_string(num) + "\n");
         instructions->push_back("	leal	(" + temp_register + ",%ecx,1), %ecx\n");
     } else {
+        bool found_factor = false;
         for (int factor : possible_factors) {
             if (num % factor != 0) continue;
-            cout << factor << endl;
+            // instructions->push_back("    # found factor: " + to_string(factor) + "\n");
             if (factor == 2 || factor == 4 || factor == 8) {
                 instructions->push_back("	leal	(,%ecx, " + to_string(factor) + "), %ecx\n");
             } else if (factor == 3 || factor == 5 || factor == 9) {
@@ -66,9 +73,20 @@ void factoring_getInstructions(vector<string>* instructions, int og_num, int num
                 instructions->push_back("	leal	(,%ecx,2), %ecx\n");
             }
             num = floor(num/factor);
+            found_factor = true;
             break;
         }
-        factoring_getInstructions(instructions, og_num, num, depth, run_count+1);
+        if (!found_factor) {
+            // instructions->push_back("    # no factors found: " + to_string(num) + "\n");
+            num--;
+            string temp_register = "%r" + to_string(8+depth) + "d";
+            instructions->push_back("    movl	%ecx, " + temp_register + "\n");
+            factoring_getInstructions(instructions, og_num, num, depth+1, run_count+1);
+            // instructions->push_back("    # +x: " + to_string(num) + "\n");
+            instructions->push_back("	leal	(" + temp_register + ",%ecx,1), %ecx\n");
+        } else {
+            factoring_getInstructions(instructions, og_num, num, depth, run_count+1);
+        }
     }
 }
 
@@ -100,10 +118,15 @@ int main(int argc, char* argv[]) {
     cout << "    movl	(%rdx), %ecx\n";
     // cout << "	imull	$" << num << ", (%rdx), %ecx\n";
 
-    vector<string> instructions;
-    factoring_getInstructions(&instructions, num, num, 0, 0);
+    vector<string>* instructions;
+    vector<string> factoring_instructions;
+    vector<string> binary_instructions;
+
+    factoring_getInstructions(&factoring_instructions, num, num, 0, 0);
+    binary_getInstructions(&binary_instructions, num);
     // Print instructions
-    for (string instruction : instructions) {
+    instructions = (factoring_instructions.size()<binary_instructions.size())? &factoring_instructions : &binary_instructions;
+    for (string instruction : *instructions) {
         cout << instruction;
     }
 
