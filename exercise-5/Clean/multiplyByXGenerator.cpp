@@ -14,6 +14,43 @@ bool isPrime(int n) {
     return true;
 }
 
+void CSD_getInstructions(vector<string>* instructions, int num) {
+    instructions->push_back("    # Implemented with CSD algorithm\n");
+    int csd_res = 0;
+    int bitSize = sizeof(num) * CHAR_BIT;
+
+    vector<int> carry(bitSize+1);
+    vector<int> csd_digits(bitSize);
+    
+    for (int i = 0; i < bitSize; i++) {
+        int bit = (num >> i) & 1;
+        int bit_next = (num >> i+1) & 1;
+        carry[i+1] = ((bit+bit_next+carry[i])>=2)?1:0;
+        csd_digits[bitSize-i-1] = bit+carry[i]-(2*carry[i+1]);
+    }
+    instructions->push_back("    movl	%ecx, %r8d\n");
+    int last_power = 1;
+    bool first_instruction = true;
+    for (int i = 0; i<csd_digits.size(); i++) {
+        int digit = csd_digits[i];
+        if (digit == 0) continue;
+        int power = csd_digits.size() - i;
+        if (last_power < power) {
+            instructions->push_back("    sall	$" + to_string(power-last_power) + ", %r8d\n");
+        } else {
+            instructions->push_back("    sarl	$" + to_string(last_power-power) + ", %r8d\n");
+        }
+        if (first_instruction) {
+            instructions->push_back("	movl	%r8d, %ecx\n");
+            first_instruction = false;
+        } else {
+            string arith_instr = (digit==1)?"addl":"subl";
+            instructions->push_back("	" + arith_instr + "	%r8d, %ecx\n");
+        }
+        last_power = power;
+    }
+}
+
 void binary_getInstructions(vector<string>* instructions, int num) {
     instructions->push_back("    # Implemented with binary summation algorithm\n");
     int bitSize = sizeof(num) * CHAR_BIT;
@@ -80,8 +117,7 @@ void factoring_getInstructions(vector<string>* instructions, int og_num, int num
     if (run_count == 0) instructions->push_back("    # Implemented with factoring algorithm\n");
     if (depth>max_depth || run_count > 20) {
         instructions->clear();
-        instructions->push_back("    # Factoring failed, falling back to binary solution\n");
-        binary_getInstructions(instructions, og_num);
+        instructions->resize(99999); // Factoring failed
         return;
     };
     if (num <= 1) return;
@@ -156,11 +192,15 @@ int main(int argc, char* argv[]) {
     vector<string>* instructions;
     vector<string> factoring_instructions;
     vector<string> binary_instructions;
+    vector<string> csd_instructions;
 
     factoring_getInstructions(&factoring_instructions, num, num, 0, 0);
     binary_getInstructions(&binary_instructions, num);
+    CSD_getInstructions(&csd_instructions, num);
+
     // Print instructions
-    instructions = (factoring_instructions.size()<binary_instructions.size())? &factoring_instructions : &binary_instructions;
+    instructions = (factoring_instructions.size()/2<binary_instructions.size())? (factoring_instructions.size()/2<csd_instructions.size())? &factoring_instructions : &csd_instructions : &binary_instructions;
+
     for (string instruction : *instructions) {
         cout << instruction;
     }
