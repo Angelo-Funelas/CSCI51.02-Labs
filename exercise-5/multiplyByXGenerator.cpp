@@ -117,8 +117,7 @@ void factoring_getInstructions(vector<string>* instructions, int og_num, int num
     if (run_count == 0) instructions->push_back("    # Implemented with factoring algorithm\n");
     if (depth>max_depth || run_count > 20) {
         instructions->clear();
-        instructions->push_back("    # Factoring failed, falling back to binary solution\n");
-        binary_getInstructions(instructions, og_num);
+        instructions->resize(99999); // Factoring failed
         return;
     };
     if (num <= 1) return;
@@ -201,6 +200,7 @@ int main(int argc, char* argv[]) {
 
     // Print instructions
     instructions = (factoring_instructions.size()/2<binary_instructions.size())? (factoring_instructions.size()/2<csd_instructions.size())? &factoring_instructions : &csd_instructions : &binary_instructions;
+
     for (string instruction : *instructions) {
         cout << instruction;
     }
