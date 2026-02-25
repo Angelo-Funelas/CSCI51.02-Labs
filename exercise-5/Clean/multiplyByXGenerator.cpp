@@ -27,7 +27,8 @@ void binary_getInstructions(vector<string>* instructions, int num) {
             shift_count++;
             int shift_count = i-last_shift_i;
             if (shift_count < 4) {
-                instructions->push_back("	leal	(, %ecx, " + to_string((int)(pow(2,shift_count))) + "), %ecx\n");
+                int mul_factor = (int)(pow(2,shift_count));
+                if (mul_factor>1) instructions->push_back("	leal	(, %ecx, " + to_string(mul_factor) + "), %ecx\n");
             } else {
                 instructions->push_back("	sall	$" + to_string(shift_count) + ", %ecx\n");
             }
@@ -55,7 +56,8 @@ void binary_getInstructions(vector<string>* instructions, int num) {
                 shift_count++;
                 int shift_count = i-last_shift_i;
                 if (shift_count < 4) {
-                    instructions->push_back("	leal	(, %r8d, " + to_string((int)(pow(2,shift_count))) + "), %r8d\n");
+                    int mul_factor = (int)(pow(2,shift_count));
+                    if (mul_factor>1) instructions->push_back("	leal	(, %r8d, " + to_string(mul_factor) + "), %r8d\n");
                 } else {
                     instructions->push_back("	sall	$" + to_string(shift_count) + ", %r8d\n");
                 }
@@ -158,7 +160,7 @@ int main(int argc, char* argv[]) {
     factoring_getInstructions(&factoring_instructions, num, num, 0, 0);
     binary_getInstructions(&binary_instructions, num);
     // Print instructions
-    instructions = (factoring_instructions.size()<binary_instructions.size() && false)? &factoring_instructions : &binary_instructions;
+    instructions = (factoring_instructions.size()<binary_instructions.size())? &factoring_instructions : &binary_instructions;
     for (string instruction : *instructions) {
         cout << instruction;
     }
